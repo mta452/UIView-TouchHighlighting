@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#import <objc/objc-runtime.h>
+#import <objc/runtime.h>
 #import "UIView+TouchHighlighting.h"
 
 @implementation UIView (TouchHighlighting)
