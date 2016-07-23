@@ -29,14 +29,14 @@ Touch highlighting can be enabled on any view by setting `touchHighlightingStyle
 ```
 
 
-To disable touch highlighting, set `touchHighlightingStyle` property to `MTHighlightingStyleNone` as follows.
+To disable touch highlighting, set the property to `MTHighlightingStyleNone` as follows.
 ```
   buttonView.touchHighlightingStyle = MTHighlightingStyleNone;
 ```
 
 ## License
 ```
-Copyright (C) 2015 Muhammad Tayyab Akram
+Copyright (C) 2016 Muhammad Tayyab Akram
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
