@@ -13,7 +13,7 @@
 		F83848E21C16FE1200822828 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F83848E01C16FE1200822828 /* Main.storyboard */; };
 		F83848E41C16FE1200822828 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F83848E31C16FE1200822828 /* Assets.xcassets */; };
 		F83848E71C16FE1200822828 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F83848E51C16FE1200822828 /* LaunchScreen.storyboard */; };
-		F83848F01C16FE7E00822828 /* UIView+TouchHighlighting.m in Sources */ = {isa = PBXBuildFile; fileRef = F83848EF1C16FE7E00822828 /* UIView+TouchHighlighting.m */; settings = {ASSET_TAGS = (); }; };
+		F83848F01C16FE7E00822828 /* UIView+TouchHighlighting.m in Sources */ = {isa = PBXBuildFile; fileRef = F83848EF1C16FE7E00822828 /* UIView+TouchHighlighting.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -220,7 +220,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -258,7 +257,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -306,6 +304,7 @@
 				F83848ED1C16FE1200822828 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
