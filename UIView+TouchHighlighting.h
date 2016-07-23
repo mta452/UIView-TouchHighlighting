@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Muhammad Tayyab Akram
+ * Copyright (C) 2016 Muhammad Tayyab Akram
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@
 #import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSInteger, MTHighlightingStyle) {
-    MTHighlightingStyleNone,
-    MTHighlightingStyleTransparentMask,
-    MTHighlightingStyleLightBackground,
-    MTHighlightingStyleSolidDarkOverlay,
-    MTHighlightingStyleHollowDarkOverlay,
+    MTHighlightingStyleNone = 0,
+    MTHighlightingStyleTransparentMask = 1,
+    MTHighlightingStyleLightBackground = 2,
+    MTHighlightingStyleSolidDarkOverlay = 3,
+    MTHighlightingStyleHollowDarkOverlay = 4,
 };
 
 @interface UIView (TouchHighlighting)

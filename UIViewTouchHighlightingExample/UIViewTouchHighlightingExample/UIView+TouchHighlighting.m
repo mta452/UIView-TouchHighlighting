@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Muhammad Tayyab Akram
+ * Copyright (C) 2016 Muhammad Tayyab Akram
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,176 +17,9 @@
 #import <objc/runtime.h>
 #import "UIView+TouchHighlighting.h"
 
-@implementation UIView (TouchHighlighting)
+#pragma mark - Class - Method Swizzling
 
-static const void *UIViewTouchHighlightingStyleKey = &UIViewTouchHighlightingStyleKey;
-static const void *UIViewMaskLayerKey = &UIViewMaskLayerKey;
-static const void *UIViewRealBackgroundKey = &UIViewRealBackgroundKey;
-static const void *UIViewRealMaskKey = &UIViewRealMaskKey;
-
-- (MTHighlightingStyle)touchHighlightingStyle {
-    return [objc_getAssociatedObject(self, UIViewTouchHighlightingStyleKey) integerValue];
-}
-
-- (void)setTouchHighlightingStyle:(MTHighlightingStyle)touchHighlightingStyle {
-    objc_setAssociatedObject(self, UIViewTouchHighlightingStyleKey, @(touchHighlightingStyle), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (CALayer *)mt_highlightingLayer {
-    return objc_getAssociatedObject(self, UIViewMaskLayerKey);
-}
-
-- (void)mt_setHighlightingLayer:(CALayer *)layer {
-    objc_setAssociatedObject(self, UIViewMaskLayerKey, layer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (UIColor *)mt_realBackground {
-    return objc_getAssociatedObject(self, UIViewRealBackgroundKey);
-}
-
-- (void)mt_setRealBackground:(UIColor *)realBackground {
-    objc_setAssociatedObject(self, UIViewRealBackgroundKey, realBackground, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (CALayer *)mt_realMask {
-    return objc_getAssociatedObject(self, UIViewRealMaskKey);
-}
-
-- (void)mt_setRealMask:(CALayer *)mask {
-    objc_setAssociatedObject(self, UIViewRealMaskKey, mask, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (CGRect)mt_zeroedFrame {
-    CGRect frame;
-    frame.origin = CGPointZero;
-    frame.size = self.frame.size;
-
-    return frame;
-}
-
-- (UIImage *)mt_generateLayerImage {
-    UIImage *outputImage = nil;
-
-    UIGraphicsBeginImageContextWithOptions(self.layer.frame.size, NO, [UIScreen mainScreen].scale);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-
-    [self.layer renderInContext:context];
-    outputImage = UIGraphicsGetImageFromCurrentImageContext();
-
-    UIGraphicsEndImageContext();
-
-    return outputImage;
-}
-
-- (void)mt_highlight {
-    MTHighlightingStyle highlightingStyle = self.touchHighlightingStyle;
-
-    switch (highlightingStyle) {
-        case MTHighlightingStyleTransparentMask:
-            {
-                CALayer *maskLayer = [self mt_highlightingLayer];
-                if (!maskLayer) {
-                    maskLayer = [CALayer layer];
-                    maskLayer.backgroundColor = [UIColor blackColor].CGColor;
-                    maskLayer.opacity = 0.5;
-
-                    [self mt_setHighlightingLayer:maskLayer];
-                }
-
-                maskLayer.frame = [self mt_zeroedFrame];
-                [self mt_setRealMask:self.layer.mask];
-                self.layer.mask = maskLayer;
-            }
-            break;
-
-        case MTHighlightingStyleLightBackground:
-            {
-                [self mt_setRealBackground:self.backgroundColor];
-                self.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.075];
-            }
-            break;
-
-        case MTHighlightingStyleSolidDarkOverlay:
-            {
-                CALayer *overlayLayer = [CALayer layer];
-                overlayLayer.backgroundColor = [UIColor blackColor].CGColor;
-                overlayLayer.opacity = 0.5;
-                overlayLayer.frame = [self mt_zeroedFrame];
-
-                [self mt_setHighlightingLayer:overlayLayer];
-                [self.layer addSublayer:overlayLayer];
-            }
-            break;
-
-        case MTHighlightingStyleHollowDarkOverlay:
-            {
-                CALayer *maskLayer = [CALayer layer];
-                maskLayer.contents = (id)[self mt_generateLayerImage].CGImage;
-                maskLayer.frame = [self mt_zeroedFrame];
-
-                CALayer *overlayLayer = [CALayer layer];
-                overlayLayer.mask = maskLayer;
-                overlayLayer.backgroundColor = [UIColor blackColor].CGColor;
-                overlayLayer.opacity = 0.5;
-                overlayLayer.frame = [self mt_zeroedFrame];
-
-                [self mt_setHighlightingLayer:overlayLayer];
-                [self.layer addSublayer:overlayLayer];
-            }
-            break;
-
-        default:
-            break;
-    }
-}
-
-- (void)mt_unhighlight {
-    MTHighlightingStyle highlightingStyle = self.touchHighlightingStyle;
-
-    switch (highlightingStyle) {
-        case MTHighlightingStyleTransparentMask:
-            {
-                self.layer.mask = [self mt_realMask];
-                [self mt_setRealMask:nil];
-            }
-            break;
-
-        case MTHighlightingStyleLightBackground:
-            {
-                self.backgroundColor = [self mt_realBackground];
-                [self mt_setRealBackground:nil];
-            }
-            break;
-
-        case MTHighlightingStyleSolidDarkOverlay:
-            {
-                [[self mt_highlightingLayer] removeFromSuperlayer];
-                [self mt_setHighlightingLayer:nil];
-            }
-            break;
-
-        case MTHighlightingStyleHollowDarkOverlay:
-            {
-                [[self mt_highlightingLayer] removeFromSuperlayer];
-                [self mt_setHighlightingLayer:nil];
-            }
-            break;
-
-        default:
-            break;
-    }
-}
-
-@end
-
-@implementation UIResponder (TouchHighlighting)
-
-static void (*UIResponderTouchesBeganIMP)(id self, SEL _cmd, NSSet *touches, UIEvent *event) = NULL;
-static void (*UIResponderTouchesMovedIMP)(id self, SEL _cmd, NSSet *touches, UIEvent *event) = NULL;
-static void (*UIResponderTouchesEndedIMP)(id self, SEL _cmd, NSSet *touches, UIEvent *event) = NULL;
-static void (*UIResponderTouchesCancelledIMP)(id self, SEL _cmd, NSSet *touches, UIEvent *event) = NULL;
-
-static void mt_swizzleInstanceMethod(Class class, SEL name, IMP replacement, IMP *original) {
+static void ClassSwizzleInstanceMethod(Class class, SEL name, IMP replacement, IMP *original) {
     Method method = class_getInstanceMethod(class, name);
     IMP imp = NULL;
 
@@ -207,54 +40,246 @@ static void mt_swizzleInstanceMethod(Class class, SEL name, IMP replacement, IMP
     }
 }
 
-static void mt_touchesBegan(id self, SEL _cmd, NSSet *touches, UIEvent *event) {
+#pragma mark - UIView - Touch Highlighting
+
+static const void *UIViewTouchHighlightingStyleKey = &UIViewTouchHighlightingStyleKey;
+static const void *UIViewOriginalObjectKey = &UIViewOriginalObjectKey;
+static const void *UIViewHighlightingObjectKey = &UIViewHighlightingObjectKey;
+
+static MTHighlightingStyle UIViewGetTouchHighlightingStyle(UIView *view) {
+    return (MTHighlightingStyle)[objc_getAssociatedObject(view, UIViewTouchHighlightingStyleKey) integerValue];
+}
+
+static void UIViewSetTouchHighlightingStyle(UIView *view, MTHighlightingStyle style) {
+    objc_setAssociatedObject(view, UIViewTouchHighlightingStyleKey, @(style), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+static id UIViewGetOriginalObject(UIView *view) {
+    return objc_getAssociatedObject(view, UIViewOriginalObjectKey);
+}
+
+static void UIViewSetOriginalObject(UIView *view, id object) {
+    objc_setAssociatedObject(view, UIViewOriginalObjectKey, object, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+static id UIViewGetHighlightingObject(UIView *view) {
+    return objc_getAssociatedObject(view, UIViewHighlightingObjectKey);
+}
+
+static void UIViewSetHighlightingObject(UIView *view, id object) {
+    objc_setAssociatedObject(view, UIViewHighlightingObjectKey, object, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+static void UIViewClearStateObjects(UIView *view) {
+    UIViewSetOriginalObject(view, nil);
+    UIViewSetHighlightingObject(view, nil);
+}
+
+static CGRect UIViewGetZeroedFrame(UIView *view) {
+    CGRect frame;
+    frame.origin = CGPointZero;
+    frame.size = view.frame.size;
+
+    return frame;
+}
+
+static UIImage *UIViewTakeScreenshot(UIView *view) {
+    UIImage *outputImage = nil;
+
+    UIGraphicsBeginImageContextWithOptions(view.layer.frame.size, NO, [UIScreen mainScreen].scale);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+
+    [view.layer renderInContext:context];
+    outputImage = UIGraphicsGetImageFromCurrentImageContext();
+
+    UIGraphicsEndImageContext();
+
+    return outputImage;
+}
+
+static void UIViewHighlight(UIView *view) {
+    MTHighlightingStyle highlightingStyle = view.touchHighlightingStyle;
+
+    switch (highlightingStyle) {
+        case MTHighlightingStyleNone:
+            break;
+
+        case MTHighlightingStyleTransparentMask: {
+            // Get or create the highlighting layer.
+            CALayer *highlightingLayer = (CALayer *)UIViewGetHighlightingObject(view);
+            if (!highlightingLayer) {
+                highlightingLayer = [CALayer layer];
+                highlightingLayer.backgroundColor = [UIColor blackColor].CGColor;
+                highlightingLayer.opacity = 0.36;
+
+                UIViewSetHighlightingObject(view, highlightingLayer);
+            }
+            // Update the frame of highlighting layer.
+            highlightingLayer.frame = UIViewGetZeroedFrame(view);
+
+            // Save the original mask layer.
+            UIViewSetOriginalObject(view, view.layer.mask);
+            // Replace the mask layer with highlighting one.
+            view.layer.mask = highlightingLayer;
+            break;
+        }
+
+        case MTHighlightingStyleLightBackground: {
+            // Save the original background color.
+            UIViewSetOriginalObject(view, view.backgroundColor);
+            // Replace the background color with highlighting one.
+            view.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.18];
+            break;
+        }
+
+        case MTHighlightingStyleSolidDarkOverlay: {
+            // Get or create the overlay layer.
+            CALayer *overlayLayer = (CALayer *)UIViewGetHighlightingObject(view);
+            if (!overlayLayer) {
+                overlayLayer = [CALayer layer];
+                overlayLayer.backgroundColor = [UIColor blackColor].CGColor;
+                overlayLayer.opacity = 0.48;
+
+                UIViewSetHighlightingObject(view, overlayLayer);
+            }
+            // Update the frame of overlay layer.
+            overlayLayer.frame = UIViewGetZeroedFrame(view);
+
+            // Add the overlay layer in the view.
+            [view.layer addSublayer:overlayLayer];
+            break;
+        }
+
+        case MTHighlightingStyleHollowDarkOverlay: {
+            // Create the mask layer with the contents of view.
+            CALayer *maskLayer = [CALayer layer];
+            maskLayer.contents = (id)UIViewTakeScreenshot(view).CGImage;
+            maskLayer.frame = UIViewGetZeroedFrame(view);
+
+            // Create the overlay layer.
+            CALayer *overlayLayer = [CALayer layer];
+            overlayLayer.mask = maskLayer;
+            overlayLayer.backgroundColor = [UIColor blackColor].CGColor;
+            overlayLayer.opacity = 0.48;
+            overlayLayer.frame = UIViewGetZeroedFrame(view);
+
+            // Save the overlay layer so that it can be removed upon unhighlighting.
+            UIViewSetHighlightingObject(view, overlayLayer);
+            // Add the overlay layer in the view.
+            [view.layer addSublayer:overlayLayer];
+            break;
+        }
+    }
+}
+
+static void UIViewUnhighlight(UIView *view) {
+    MTHighlightingStyle highlightingStyle = view.touchHighlightingStyle;
+
+    switch (highlightingStyle) {
+        case MTHighlightingStyleNone:
+            break;
+
+        case MTHighlightingStyleTransparentMask: {
+            // Restore the original mask layer.
+            view.layer.mask = UIViewGetOriginalObject(view);
+            UIViewSetOriginalObject(view, nil);
+            break;
+        }
+
+        case MTHighlightingStyleLightBackground: {
+            // Restore the original background color.
+            view.backgroundColor = (UIColor *)UIViewGetOriginalObject(view);
+            UIViewSetOriginalObject(view, nil);
+            break;
+        }
+
+        case MTHighlightingStyleSolidDarkOverlay: {
+            // Remove the overlay layer so that the view becomes unhighlighted.
+            CALayer *overlayLayer = (CALayer *)UIViewGetHighlightingObject(view);
+            [overlayLayer removeFromSuperlayer];
+            break;
+        }
+
+        case MTHighlightingStyleHollowDarkOverlay: {
+            // Remove the overlay layer so that the view becomes unhighlighted.
+            CALayer *overlayLayer = (CALayer *)UIViewGetHighlightingObject(view);
+            [overlayLayer removeFromSuperlayer];
+
+            UIViewSetHighlightingObject(view, nil);
+            break;
+        }
+    }
+}
+
+#pragma mark - UIResponder - Touch Handling
+
+static void (*UIResponderOriginalTouchesBegan)(id self, SEL _cmd, NSSet *touches, UIEvent *event) = NULL;
+static void (*UIResponderOriginalTouchesMoved)(id self, SEL _cmd, NSSet *touches, UIEvent *event) = NULL;
+static void (*UIResponderOriginalTouchesEnded)(id self, SEL _cmd, NSSet *touches, UIEvent *event) = NULL;
+static void (*UIResponderOriginalTouchesCancelled)(id self, SEL _cmd, NSSet *touches, UIEvent *event) = NULL;
+
+static void UIResponderReplacementTouchesBegan(id self, SEL _cmd, NSSet *touches, UIEvent *event) {
     if ([self isKindOfClass:[UIView class]]) {
-        UIView *view = (UIView *)self;
-        [view mt_highlight];
+        UIViewHighlight((UIView *)self);
     }
 
-    UIResponderTouchesBeganIMP(self, _cmd, touches, event);
+    UIResponderOriginalTouchesBegan(self, _cmd, touches, event);
 }
 
-static void mt_touchesMoved(id self, SEL _cmd, NSSet *touches, UIEvent *event) {
-    UIResponderTouchesMovedIMP(self, _cmd, touches, event);
+static void UIResponderReplacementTouchesMoved(id self, SEL _cmd, NSSet *touches, UIEvent *event) {
+    UIResponderOriginalTouchesMoved(self, _cmd, touches, event);
 }
 
-static void mt_touchesEnded(id self, SEL _cmd, NSSet *touches, UIEvent *event) {
+static void UIResponderReplacementTouchesEnded(id self, SEL _cmd, NSSet *touches, UIEvent *event) {
     if ([self isKindOfClass:[UIView class]]) {
-        UIView *view = (UIView *)self;
-        [view mt_unhighlight];
+        UIViewUnhighlight((UIView *)self);
     }
 
-    UIResponderTouchesEndedIMP(self, _cmd, touches, event);
+    UIResponderOriginalTouchesEnded(self, _cmd, touches, event);
 }
 
-static void mt_touchesCancelled(id self, SEL _cmd, NSSet *touches, UIEvent *event) {
+static void UIResponderReplacementTouchesCancelled(id self, SEL _cmd, NSSet *touches, UIEvent *event) {
     if ([self isKindOfClass:[UIView class]]) {
-        UIView *view = (UIView *)self;
-        [view mt_unhighlight];
+        UIViewUnhighlight((UIView *)self);
     }
 
-    UIResponderTouchesCancelledIMP(self, _cmd, touches, event);
+    UIResponderOriginalTouchesCancelled(self, _cmd, touches, event);
 }
+
+#pragma mark - Categories Implementation
+
+@implementation UIResponder (TouchHighlighting)
 
 + (void)load {
-    mt_swizzleInstanceMethod(self,
-                             @selector(touchesBegan:withEvent:),
-                             (IMP)mt_touchesBegan,
-                             (IMP *)&UIResponderTouchesBeganIMP);
-    mt_swizzleInstanceMethod(self,
-                             @selector(touchesEnded:withEvent:),
-                             (IMP)mt_touchesEnded,
-                             (IMP *)&UIResponderTouchesEndedIMP);
-    mt_swizzleInstanceMethod(self,
-                             @selector(touchesMoved:withEvent:),
-                             (IMP)mt_touchesMoved,
-                             (IMP *)&UIResponderTouchesMovedIMP);
-    mt_swizzleInstanceMethod(self,
-                             @selector(touchesCancelled:withEvent:),
-                             (IMP)mt_touchesCancelled,
-                             (IMP *)&UIResponderTouchesCancelledIMP);
+    ClassSwizzleInstanceMethod(self,
+                               @selector(touchesBegan:withEvent:),
+                               (IMP)UIResponderReplacementTouchesBegan,
+                               (IMP *)&UIResponderOriginalTouchesBegan);
+    ClassSwizzleInstanceMethod(self,
+                               @selector(touchesEnded:withEvent:),
+                               (IMP)UIResponderReplacementTouchesEnded,
+                               (IMP *)&UIResponderOriginalTouchesEnded);
+    ClassSwizzleInstanceMethod(self,
+                               @selector(touchesMoved:withEvent:),
+                               (IMP)UIResponderReplacementTouchesMoved,
+                               (IMP *)&UIResponderOriginalTouchesMoved);
+    ClassSwizzleInstanceMethod(self,
+                               @selector(touchesCancelled:withEvent:),
+                               (IMP)UIResponderReplacementTouchesCancelled,
+                               (IMP *)&UIResponderOriginalTouchesCancelled);
+}
+
+@end
+
+@implementation UIView (TouchHighlighting)
+
+- (MTHighlightingStyle)touchHighlightingStyle {
+    return UIViewGetTouchHighlightingStyle(self);
+}
+
+- (void)setTouchHighlightingStyle:(MTHighlightingStyle)touchHighlightingStyle {
+    UIViewClearStateObjects(self);
+    UIViewSetTouchHighlightingStyle(self, touchHighlightingStyle);
 }
 
 @end
