@@ -1,4 +1,4 @@
-# UIView+TouchHighlighting
+# UIView+TouchHighlighting & MTCompoundButton
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Build Status](https://travis-ci.org/mta452/UIView-TouchHighlighting.svg)](https://travis-ci.org/mta452/UIView-TouchHighlighting)
@@ -38,6 +38,9 @@ To disable touch highlighting, set the property to `MTHighlightingStyleNone` as 
 ```
   buttonView.touchHighlightingStyle = MTHighlightingStyleNone;
 ```
+
+## MTCompoundButton
+MTCompoundButton can be used to convert a collection of multiple views into a button. Just make the superview inherit from MTCompoundButton and set the `touchHighlightingStyle` property as explained above. With this, normal views can be made to look and behave like a native UIButton.
 
 ## License
 ```
