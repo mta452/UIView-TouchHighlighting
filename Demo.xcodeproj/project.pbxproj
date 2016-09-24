@@ -18,6 +18,8 @@
 		6E25278A1D439A2A00035620 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E2527891D439A2A00035620 /* QuartzCore.framework */; };
 		6E25278C1D439A3400035620 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E25278B1D439A3400035620 /* Foundation.framework */; };
 		6E2527991D43A31700035620 /* UIView+TouchHighlighting.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E2527981D43A31700035620 /* UIView+TouchHighlighting.m */; };
+		6E708CB81D96660B00E4AD7D /* MTCompoundButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E708CB51D96660B00E4AD7D /* MTCompoundButton.m */; };
+		6E708CBD1D9667BC00E4AD7D /* MTViewHighlighter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E708CBC1D9667BC00E4AD7D /* MTViewHighlighter.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +37,10 @@
 		6E25278B1D439A3400035620 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6E2527971D43A31700035620 /* UIView+TouchHighlighting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+TouchHighlighting.h"; sourceTree = "<group>"; };
 		6E2527981D43A31700035620 /* UIView+TouchHighlighting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+TouchHighlighting.m"; sourceTree = "<group>"; };
+		6E708CB41D96660B00E4AD7D /* MTCompoundButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCompoundButton.h; sourceTree = "<group>"; };
+		6E708CB51D96660B00E4AD7D /* MTCompoundButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCompoundButton.m; sourceTree = "<group>"; };
+		6E708CBB1D9667BC00E4AD7D /* MTViewHighlighter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTViewHighlighter.h; sourceTree = "<group>"; };
+		6E708CBC1D9667BC00E4AD7D /* MTViewHighlighter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTViewHighlighter.m; sourceTree = "<group>"; };
 		F83848D41C16FE1200822828 /* UIView+TouchHighlighting_Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "UIView+TouchHighlighting_Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -81,10 +87,22 @@
 		6E2527961D43A31700035620 /* UIView+TouchHighlighting */ = {
 			isa = PBXGroup;
 			children = (
+				6E708CBA1D9667BC00E4AD7D /* Internal */,
+				6E708CB41D96660B00E4AD7D /* MTCompoundButton.h */,
+				6E708CB51D96660B00E4AD7D /* MTCompoundButton.m */,
 				6E2527971D43A31700035620 /* UIView+TouchHighlighting.h */,
 				6E2527981D43A31700035620 /* UIView+TouchHighlighting.m */,
 			);
 			path = "UIView+TouchHighlighting";
+			sourceTree = "<group>";
+		};
+		6E708CBA1D9667BC00E4AD7D /* Internal */ = {
+			isa = PBXGroup;
+			children = (
+				6E708CBB1D9667BC00E4AD7D /* MTViewHighlighter.h */,
+				6E708CBC1D9667BC00E4AD7D /* MTViewHighlighter.m */,
+			);
+			path = Internal;
 			sourceTree = "<group>";
 		};
 		F83848CB1C16FE1200822828 = {
@@ -185,9 +203,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				6E2527601D4395D500035620 /* AppDelegate.m in Sources */,
-				6E2527671D4395D500035620 /* ViewController.m in Sources */,
-				6E2527991D43A31700035620 /* UIView+TouchHighlighting.m in Sources */,
 				6E2527691D43961000035620 /* main.m in Sources */,
+				6E708CB81D96660B00E4AD7D /* MTCompoundButton.m in Sources */,
+				6E708CBD1D9667BC00E4AD7D /* MTViewHighlighter.m in Sources */,
+				6E2527991D43A31700035620 /* UIView+TouchHighlighting.m in Sources */,
+				6E2527671D4395D500035620 /* ViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

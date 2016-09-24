@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
+        <deployment identifier="iOS"/>
+        <development version="6000" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
@@ -25,7 +27,7 @@
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7ar-Kl-743">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7ar-Kl-743" customClass="MTCompoundButton">
                                         <rect key="frame" x="102" y="112" width="96" height="109"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" image="HomeIcon" translatesAutoresizingMaskIntoConstraints="NO" id="fij-lV-bdw">
@@ -67,7 +69,7 @@
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5w4-Lt-l4p">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5w4-Lt-l4p" customClass="MTCompoundButton">
                                         <rect key="frame" x="108" y="112" width="85" height="109"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" image="SearchIcon" translatesAutoresizingMaskIntoConstraints="NO" id="SIr-fb-q8e">
@@ -109,7 +111,7 @@
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LyF-7M-JWy">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LyF-7M-JWy" customClass="MTCompoundButton">
                                         <rect key="frame" x="88" y="112" width="124" height="109"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" image="FavouritesIcon" translatesAutoresizingMaskIntoConstraints="NO" id="hDp-PR-oES">
@@ -151,7 +153,7 @@
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gVZ-pc-0Tf">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gVZ-pc-0Tf" customClass="MTCompoundButton">
                                         <rect key="frame" x="101" y="112" width="99" height="109"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" image="SettingsIcon" translatesAutoresizingMaskIntoConstraints="NO" id="HEt-Ud-6WH">
@@ -208,14 +210,15 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="hollowOverlayView" destination="5w4-Lt-l4p" id="r4k-gP-6Gj"/>
-                        <outlet property="lightBackgroundView" destination="LyF-7M-JWy" id="fOd-gF-tLt"/>
-                        <outlet property="solidOverlayView" destination="gVZ-pc-0Tf" id="xTw-Ta-gtG"/>
-                        <outlet property="transparentMaskView" destination="7ar-Kl-743" id="CdS-xy-DdO"/>
+                        <outlet property="hollowOverlayButton" destination="5w4-Lt-l4p" id="wrB-Sw-UJN"/>
+                        <outlet property="lightBackgroundButton" destination="LyF-7M-JWy" id="5Xl-4B-27a"/>
+                        <outlet property="solidOverlayButton" destination="gVZ-pc-0Tf" id="27p-5z-NXS"/>
+                        <outlet property="transparentMaskButton" destination="7ar-Kl-743" id="Hsz-1G-ffq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="288" y="160"/>
         </scene>
     </scenes>
     <resources>

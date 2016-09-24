@@ -6,15 +6,15 @@
 //  Copyright © 2016 Muhammad Tayyab Akram. All rights reserved.
 //
 
-#import "UIView+TouchHighlighting.h"
+#import "MTCompoundButton.h"
 #import "ViewController.h"
 
 @interface ViewController ()
 
-@property (weak, nonatomic) IBOutlet UIView *transparentMaskView;
-@property (weak, nonatomic) IBOutlet UIView *lightBackgroundView;
-@property (weak, nonatomic) IBOutlet UIView *solidOverlayView;
-@property (weak, nonatomic) IBOutlet UIView *hollowOverlayView;
+@property (weak, nonatomic) IBOutlet MTCompoundButton *transparentMaskButton;
+@property (weak, nonatomic) IBOutlet MTCompoundButton *lightBackgroundButton;
+@property (weak, nonatomic) IBOutlet MTCompoundButton *solidOverlayButton;
+@property (weak, nonatomic) IBOutlet MTCompoundButton *hollowOverlayButton;
 
 @end
 
@@ -23,10 +23,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.transparentMaskView.touchHighlightingStyle = MTHighlightingStyleTransparentMask;
-    self.lightBackgroundView.touchHighlightingStyle = MTHighlightingStyleLightBackground;
-    self.solidOverlayView.touchHighlightingStyle = MTHighlightingStyleSolidDarkOverlay;
-    self.hollowOverlayView.touchHighlightingStyle = MTHighlightingStyleHollowDarkOverlay;
+    self.transparentMaskButton.touchHighlightingStyle = MTHighlightingStyleTransparentMask;
+    self.lightBackgroundButton.touchHighlightingStyle = MTHighlightingStyleLightBackground;
+    self.solidOverlayButton.touchHighlightingStyle = MTHighlightingStyleSolidDarkOverlay;
+    self.hollowOverlayButton.touchHighlightingStyle = MTHighlightingStyleHollowDarkOverlay;
 }
 
 - (void)didReceiveMemoryWarning {
